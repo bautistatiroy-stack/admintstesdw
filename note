@@ -1,0 +1,434 @@
+<div id="adminPanel" style="display:none;">
+
+    <script>
+        setTimeout(function() {
+            window.location.href = "FIRST.html"; // Change to your HTML file
+        }, 3000);
+
+        timearrvail
+    </script>
+
+
+    //slide
+
+
+
+
+    <style>
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .slider img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: 1s;
+        }
+        
+        .slider img.active {
+            opacity: 1;
+        }
+    </style>
+
+    <div class="slider">
+        <img src="burger.jpg" class="active">
+        <img src="sph.jpg">
+        <img src="3.jpg">
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll(".slider img");
+        let index = 0;
+
+        setInterval(() => {
+            slides[index].classList.remove("active");
+            index = (index + 1) % slides.length;
+            slides[index].classList.add("active");
+        }, 1000);
+
+
+        setTimeout(function() {
+            window.location.href = "FIRST.html"; // Change to your HTML file
+        }, 4000);
+    </script>
+
+
+    <h5>HEllO Client what is your problem do you want to fix the problem
+
+    </h5>
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Delivery Animation</title>
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: linear-gradient(180deg, #4facfe, #dff6ff);
+                overflow: hidden;
+                font-family: Arial, sans-serif;
+            }
+            
+            .scene {
+                width: 40000px;
+                height: 1200px;
+                position: relative;
+                overflow: hidden;
+                border-radius: 30px;
+                background: linear-gradient(#87ceeb, #d9f2ff);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+            }
+            /* Title */
+            
+            .title {
+                position: absolute;
+                top: 30px;
+                width: 100%;
+                text-align: center;
+                font-size: 30px;
+                font-weight: bold;
+                color: white;
+                letter-spacing: 2px;
+                text-shadow: 0 0 15px rgba(0, 0, 0, .3);
+            }
+            /* Clouds */
+            
+            .cloud {
+                position: absolute;
+                width: 100px;
+                height: 35px;
+                background: rgb(108, 107, 103);
+                border-radius: 50px;
+                animation: cloud 18s linear infinite;
+            }
+            
+            .cloud:before {
+                content: "";
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                background: chocolate;
+                border-radius: 50%;
+                left: 15px;
+                top: -18px;
+            }
+            
+            .cloud:after {
+                content: "";
+                position: absolute;
+                width: 50px;
+                height: 50px;
+                background-color: white;
+                border-radius: 50%;
+                right: 15px;
+                top: -22px;
+            }
+            
+            .c1 {
+                top: 90px;
+                left: -120px;
+            }
+            
+            .c2 {
+                top: 170px;
+                left: -250px;
+                animation-duration: 25s;
+            }
+            /* Sun */
+            
+            .sun {
+                position: absolute;
+                width: 80px;
+                height: 80px;
+                background: #FFD54F;
+                border-radius: 50%;
+                right: 20px;
+                top: 40px;
+                box-shadow: 0 0 40px #FFD54F;
+            }
+            /* Floating Package */
+            
+            .package {
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                background: #F4A261;
+                border-radius: 6px;
+                left: 70px;
+                top: 570px;
+                animation: float 3s ease-in-out infinite;
+            }
+            
+            .package:before {
+                content: "";
+                position: absolute;
+                width: 4px;
+                height: 100%;
+                background: #8B4513;
+                left: 20px;
+            }
+            /* Truck */
+            
+            .truck {
+                position: absolute;
+                bottom: 100px;
+                left: 50px;
+                animation: bounce .3s infinite alternate;
+                TOP: 600px;
+                font-size: 25px;
+            }
+            
+            .box {
+                width: 170px;
+                height: 70px;
+                background: #2563EB;
+                border-radius: 12px;
+                position: relative;
+                color: #FFD54F
+            }
+            
+            .logo {
+                position: absolute;
+                left: 18px;
+                top: 18px;
+                width: 40px;
+                height: 30px;
+                background: #FFD54F;
+                border-radius: 5px;
+            }
+            
+            .cabin {
+                width: 65px;
+                height: 60px;
+                background: #F97316;
+                position: absolute;
+                right: -55px;
+                top: 10px;
+                border-radius: 10px;
+            }
+            
+            .window {
+                position: absolute;
+                width: 35px;
+                height: 22px;
+                background: #D6F0FF;
+                right: 15px;
+                top: 10px;
+                border-radius: 4px;
+            }
+            
+            .wheel {
+                position: absolute;
+                width: 36px;
+                height: 36px;
+                background: #222;
+                border-radius: 50%;
+                bottom: -18px;
+                animation: spin .5s linear infinite;
+            }
+            
+            .wheel:after {
+                content: "";
+                position: absolute;
+                width: 15px;
+                height: 15px;
+                background: #bbb;
+                border-radius: 50%;
+                top: 10px;
+                left: 10px;
+            }
+            
+            .w1 {
+                left: 18px;
+            }
+            
+            .w2 {
+                left: 120px;
+            }
+            
+            .w3 {
+                right: -3px;
+            }
+            
+            .w4 {
+                right: 70px;
+            }
+            /* Road */
+            
+            .road {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 90px;
+                background: #444;
+            }
+            
+            .line {
+                position: absolute;
+                top: 58px;
+                width: 100%;
+                height: 6px;
+                background: repeating-linear-gradient( to right, white 0, white 40px, transparent 40px, transparent 80px);
+                animation: road .8s linear infinite;
+            }
+            /* Trees */
+            
+            .tree {
+                position: absolute;
+                bottom: 120px;
+                width: 20px;
+                height: 70px;
+                background: #8B5A2B;
+                TOP: 560px;
+                animation: trees 2s linear infinite;
+            }
+            
+            .tree:before {
+                content: "";
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                background: #2E8B57;
+                border-radius: 50%;
+                left: -20px;
+                top: -35px;
+            }
+            
+            .t1 {
+                left: 420px;
+                animation-delay: 3s;
+            }
+            
+            .t2 {
+                left: 650px;
+                animation-delay: 1s;
+            }
+            /* Animation */
+            
+            @keyframes spin {
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+            
+            @keyframes bounce {
+                100% {
+                    transform: translateY(-4px);
+                }
+            }
+            
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+            
+            @keyframes road {
+                100% {
+                    background-position: -80px;
+                }
+            }
+            
+            @keyframes cloud {
+                100% {
+                    transform: translateX(520px);
+                }
+            }
+            
+            @keyframes trees {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-600px);
+                }
+            }
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="scene">
+
+            <div class="title">
+                🚚 DELIVERY
+            </div>
+
+            <div class="sun"></div>
+
+
+
+
+
+        </div>
+
+</div>
+
+<div class="road">
+
+    <div class="line"></div>
+
+</div>
+<div class="sun"></div>
+
+<div class="cloud c1"></div>
+<div class="cloud c2"></div>
+
+<div class="package"></div>
+
+<div class="tree t1"></div>
+<div class="tree t2"></div>
+
+
+<div class="truck">
+
+    <div class="box"> WELCOME TO SHOP
+
+
+
+        <div class="wheel w1"></div>
+
+        <div class="wheel w2"></div>
+        <div class="wheel w4"></div>
+
+        <div class="cabin">
+
+            <div class="window"></div>
+
+            <div class="wheel w3"></div>
+
+        </div>
+    </div>
+    <script>
+        setTimeout(function() {
+            window.location.href = "FIRST.html"; // Change to your HTML file
+        }, 4000);
+    </script>
+    </body>
+
+    </html>

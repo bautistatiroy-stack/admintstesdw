@@ -1,0 +1,174 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #101f40;
+    }
+    
+    .login-box {
+        max-width: 420px;
+        margin: 70px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .login-box h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #ea580c;
+    }
+    
+    .login-box input {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        border: 1px solid #ccc;
+    }
+    
+    .login-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(45deg, #ea580c, #fb923c);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    .back-btn {
+        width: 100%;
+        padding: 14px 10px;
+        margin-top: 1px;
+        margin-bottom: 14px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(45deg, #ea580c, #fb923c);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    .back-btn:hover {
+        background: linear-gradient(45deg, #4cf205, #b75404);
+        transform: scale(1.07);
+    }
+</style>
+
+<script>
+   /*para sa blacking* go to index*/
+    if (sessionStorage.getItem("index") !== "true") {
+
+        alert("Please login first admin");
+
+        window.location.replace("index.html");
+
+    }
+</script>
+
+<div class="login-box">
+    <h2>SOLO BILAO</h2>
+    <input type="text" id="adminUser" placeholder="Username">
+    <input type="password" id="adminPass" placeholder="Password">
+    <button class="login-btn" onclick="loginAdmin()">Login</button>
+    <button class="back-btn" onclick="goShop()">Back</button>
+    <div id="error" style="color: red; margin-top: 10px;"></div>
+
+</div>
+
+<div id="error" style="color: red; margin-top: 10px;"></div>
+
+
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzw18cFASV8ni2apNYYMQgnh1Sh61SyRPCr_iBNpCzl6rwx2PDVwKDj9j4mCh_0v4aCqg/exec";
+
+    async function loginAdmin() {
+
+        let user = document.getElementById("adminUser").value.trim();
+        let pass = document.getElementById("adminPass").value;
+
+        const email = document.getElementById("adminUser").value.trim();
+        const password = document.getElementById("adminPass").value.trim();
+
+        // Check if fields are empty
+        if (!email && !password) {
+            document.getElementById("error").textContent =
+                "Please enter your email and password.";
+            return;
+        }
+
+        if (!email) {
+            document.getElementById("error").textContent =
+                "Please enter your email.";
+            return;
+        }
+
+        if (!password) {
+            document.getElementById("error").textContent =
+                "Please enter your password.";
+            return;
+        }
+
+        document.getElementById("error").textContent = "";
+
+        try {
+
+            const response = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "login",
+                    username: user,
+                    password: pass,
+
+                })
+            });
+
+            const result = await response.json();
+            //*for blacking 
+            if (result.success) {
+
+                sessionStorage.setItem("solo", "true");
+                sessionStorage.setItem("token", result.token);
+
+                window.location.href = "SOLO BUNDLE.html";
+
+            } else {
+
+                document.getElementById("error").textContent =
+                    result.message;
+
+            }
+            //*
+
+            if (result.success) {
+
+
+
+                alert("Login Successful");
+
+            } else {
+
+                alert(result.message);
+                if (!result.success) {
+
+                    alert(result.message);
+                }
+            }
+
+        } catch (err) {
+
+            console.log(err);
+            alert("Login failed.");
+
+        }
+
+    }
+</script>

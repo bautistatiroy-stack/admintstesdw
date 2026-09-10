@@ -1,0 +1,299 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', sans-serif;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        min-height: 100vh;
+        padding: 15px;
+    }
+    
+    h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 15px;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+    
+    .form-box {
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+    }
+    
+    .form-box h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        color: #f97316;
+    }
+    
+    .form-box input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-size: 15px;
+    }
+    
+    .form-box button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        background: #f97316;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .all-box {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .all-box button {
+        flex: 1;
+        min-width: 120px;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .all-box button:nth-child(1) {
+        background: #ef4444;
+    }
+    
+    .all-box button:nth-child(2) {
+        background: #3b82f6;
+    }
+    
+    .all-box button:nth-child(3) {
+        background: #22c55e;
+    }
+    
+    .all-box button:nth-child(4) {
+        background: #0437f1;
+    }
+    
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+    }
+    
+    .card {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+        transition: .3s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    
+    .card-content {
+        padding: 15px;
+    }
+    
+    .card-content h3 {
+        margin-bottom: 8px;
+        color: #333;
+    }
+    
+    .card-content div {
+        color: #16a34a;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .card-content p {
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    .card-content button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background: #ef4444;
+        color: white;
+        cursor: pointer;
+    }
+    
+    @media(max-width:600px) {
+        .products {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .all-box {
+            flex-direction: column;
+        }
+        .all-box button {
+            width: 100%;
+        }
+    }
+    
+    .price {
+        color: #ef4444;
+        font-weight: bold;
+        font-size: 18px;
+    }
+</style>
+
+<script>
+    // for blacking if not login
+    if (sessionStorage.getItem("bbq") !== "true") {
+
+        alert("Please login first");
+
+        window.location.replace("bbqpass.html");
+
+    }
+</script>
+
+
+<div class="form-box">
+
+    <h2>BBQ</h2>
+
+    <input id="name" placeholder="Product Name">
+    <input id="price" type="number" placeholder="Price">
+    <input id="stock" type="number" placeholder="Stock">
+    <input id="img" placeholder="Image URL">
+
+    <button onclick="addProduct()">Add Product</button>
+
+</div>
+
+<div class="products" id="list"></div>
+
+</div>
+
+<script src="vioceai.js"></script>
+<script>
+    const API = "https://script.google.com/macros/s/AKfycbxJSVRcBNYle5axXffNKpGozPe0R2UszFODImfOZ1MTUSvN--n6auY0IVp8Abi9Ry9aJQ/exec";
+
+
+    /* ================= GOOGLE SHEETS API ================= */
+
+    function addProduct() {
+
+        let name = document.getElementById("name").value;
+        let price = document.getElementById("price").value;
+        let stock = document.getElementById("stock").value;
+        let img = document.getElementById("img").value;
+
+        if (!name || !price || !stock || !img) {
+            alert("Fill all fields");
+            return;
+        }
+
+        fetch(API, {
+                method: "POST",
+                body: new URLSearchParams({
+                    action: "add",
+                    name: name,
+                    price: price,
+                    stock: stock,
+                    img: img
+                })
+            })
+            .then(r => r.text())
+            .then(res => {
+                alert(res);
+                loadProducts();
+                clearForm();
+            });
+
+    }
+
+    function loadProducts() {
+
+        fetch(API)
+            .then(r => r.json())
+            .then(data => {
+
+                let html = "";
+
+                data.forEach(p => {
+
+                    html += `
+<div class="card">
+
+<img src="${p.img}">
+
+<div class="card-content">
+
+<h3>${p.name}</h3>
+
+<div class="price">₱${p.price}</div>
+
+<p>Stock: ${p.stock}</p>
+
+<button onclick="deleteItem('${p.id}')">
+Delete
+</button>
+
+</div>
+
+</div>
+`;
+
+                });
+
+                document.getElementById("list").innerHTML = html;
+
+            });
+
+    }
+
+    function deleteItem(id) {
+
+        fetch(API, {
+                method: "POST",
+                body: new URLSearchParams({
+                    action: "delete",
+                    id: id
+                })
+            })
+            .then(r => r.text())
+            .then(() => {
+                loadProducts();
+            });
+
+    }
+
+
+
+    /* INIT */
+    loadProducts();
+</script>
+
+</body>
+
+</html>

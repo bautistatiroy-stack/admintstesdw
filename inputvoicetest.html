@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Speech to Text</title>
+</head>
+
+<body>
+
+    <button id="start">🎤 Start</button>
+    <button id="stop">⏹ Stop</button>
+
+    <p id="result"></p>
+
+    <script>
+        const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            alert("Speech Recognition is not supported in this browser.");
+        }
+
+        const recognition = new SpeechRecognition();
+
+        recognition.continuous = true; // Keep listening
+        recognition.interimResults = true; // Show words while speaking
+        recognition.lang = "en-US"; // Change to "fil-PH" if preferred
+
+        const result = document.getElementById("result");
+
+        recognition.onresult = (event) => {
+            let transcript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+
+            result.textContent = transcript;
+        };
+
+        recognition.onerror = (event) => {
+            console.log("Error:", event.error);
+        };
+
+        document.getElementById("start").onclick = () => {
+            recognition.start();
+        };
+
+        document.getElementById("stop").onclick = () => {
+            recognition.stop();
+        };
+    </script>
+
+</body>
+
+</html>

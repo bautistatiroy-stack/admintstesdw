@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Manager</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #101f40;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #f8f4f4;
+        }
+        
+        input,
+        textarea,
+        button {
+            width: 100%;
+            padding: 10px 0;
+            margin: 1px 0;
+            font-size: 15px 15px;
+            color: #15a96e;
+        }
+        
+        button {
+            cursor: pointer;
+            border: none;
+            color: white;
+            margin-top: 10PX;
+        }
+        
+        .save {
+            background: green;
+        }
+        
+        .cancel {
+            background: gray;
+        }
+        
+        .edit {
+            background: orange;
+            width: auto;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+        
+        .edit:hover {
+            background: #2fe007;
+            padding: 14px 10px;
+        }
+        
+        .delete {
+            background: red;
+            width: auto;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+        
+        .delete:hover {
+            background: #56223f;
+            padding: 14px 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 1px;
+        }
+        
+        img {
+            width: 80px;
+        }
+        
+        input {
+            background: #f1f1f1;
+            color: #030757;
+            left: 1px;
+        }
+        
+        .container {
+            cursor: pointer;
+            text-align: left;
+            margin: auto;
+            background: rgb(56, 53, 53);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        h2 {
+            color: #f8f5f5;
+            font-size: 10px;
+            left: 0px;
+            width: auto;
+        }
+        
+        .ID {
+            grid-template-columns: repeat(2, 1fr);
+            background-color: #101f40;
+            COLOR: WHITE;
+        }
+    </style>
+</head>
+<script>
+    // for blacking if not login
+    if (sessionStorage.getItem("adminLogin") !== "true") {
+
+        alert("Please login first");
+
+        window.location.replace("devpass.html");
+
+    }
+</script>
+
+<body>
+    <!-- SEARCH -->
+
+    <h1>Profile CRUD</h1>
+    <div class="container">
+        <input type="hidden" id="id">
+
+        <h2>Name</h2>
+        <input id="name" placeholder="Name">
+        <h2>Status</h2>
+        <input id="status" placeholder="Status">
+        <h2>Message</h2>
+        <textarea id="message" placeholder="Message"></textarea>
+        <h2>Image URL</h2>
+        <input id="img" placeholder="Image URL">
+
+        <h2>Save</h2>
+        <button class="save" onclick="saveData()">Save</button>
+
+        <button class="cancel" onclick="clearForm()">Cancel</button>
+    </div>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="🔍 Search name, status, message..." onkeyup="searchData()">
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Message</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody class="ID" id="list"></tbody>
+
+    </table>
+
+
+    <script>
+        function searchData() {
+
+            const search = document
+                .getElementById("search")
+                .value
+                .toLowerCase()
+                .trim();
+
+            const rows = document.querySelectorAll("#list tr");
+
+            rows.forEach(row => {
+
+                const text = row.innerText.toLowerCase();
+
+                if (text.includes(search)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+        }
+        const API = "https://script.google.com/macros/s/AKfycbykjiT97pEvfmb00hmQSARGNbcvVqLEd9IzuaK_OE72EJpZ9QrS1Kd-77kEoQXB16EK/exec";
+
+        load();
+
+        function load() {
+
+            fetch(API)
+                .then(r => r.json())
+                .then(data => {
+
+                    let html = "";
+
+                    data.forEach(item => {
+
+                        html += `
+<tr>
+
+<td>${item.name}</td>
+
+<td>${item.status}</td>
+
+<td>${item.message}</td>
+
+<td><img src="${item.img}"></td>
+
+<td>
+
+<button class="edit"
+onclick='editData(${JSON.stringify(item)})'>Edit</button>
+
+<button class="delete"
+onclick="deleteData('${item.id}')">Delete</button>
+
+</td>
+
+</tr>
+`;
+
+                    });
+
+                    document.getElementById("list").innerHTML = html;
+
+                });
+
+        }
+
+
+        function saveData() {
+
+            let id = document.getElementById("id").value;
+
+            let form = new URLSearchParams();
+
+            if (id == "") {
+
+                form.append("action", "add");
+
+            } else {
+
+                form.append("action", "edit");
+                form.append("id", id);
+
+            }
+
+            form.append("name", document.getElementById("name").value);
+            form.append("status", document.getElementById("status").value);
+            form.append("message", document.getElementById("message").value);
+            form.append("img", document.getElementById("img").value);
+
+            fetch(API, {
+
+                method: "POST",
+                body: form
+
+            })
+
+            .then(r => r.text())
+                .then(msg => {
+
+                    alert(msg);
+
+                    clearForm();
+
+                    load();
+
+                });
+
+        }
+
+
+        function editData(item) {
+
+
+            document.getElementById("id").value = item.id;
+            document.getElementById("name").value = item.name;
+            document.getElementById("status").value = item.status;
+            document.getElementById("message").value = item.message;
+            document.getElementById("img").value = item.img;
+
+        }
+
+
+        function deleteData(id) {
+
+            if (!confirm("Delete this record?")) return;
+
+            let form = new URLSearchParams();
+
+            form.append("action", "delete");
+            form.append("id", id);
+
+            fetch(API, {
+
+                method: "POST",
+                body: form
+
+            })
+
+            .then(r => r.text())
+                .then(msg => {
+
+                    alert(msg);
+
+                    load();
+
+                });
+
+        }
+
+
+        function clearForm() {
+
+            document.getElementById("id").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("status").value = "";
+            document.getElementById("message").value = "";
+            document.getElementById("img").value = "";
+
+        }
+    </script>
+
+</body>
+
+</html>
